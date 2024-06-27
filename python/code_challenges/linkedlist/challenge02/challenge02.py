@@ -17,68 +17,64 @@ class Node:
         self.data = data
         self.next = None
 
-class LinkedList:
-    """
-    Represents a linked list data structure.
-    """
-    def __init__(self):
+import math
+
+class ListNode:
+    def __init__(self, val):
         """
-        Initializes a new LinkedList object.
+        Initialize a ListNode with the given value.
         """
-        self.head = None
+        self.val = val
+        self.next = None
 
-    def add_node(self, data):
+    def append(self, value):
         """
-        Adds a new node containing the given data to the end of the linked list.
-
-        Args:
-            data (any): The data to store in the new node.
+        Append a new node with the given value to the end of the linked list.
         """
-        new_node = Node(data)
-        if self.head is None:
-            self.head = new_node
-        else:
-            last_node = self.head
-            while last_node.next:
-                last_node = last_node.next
-            last_node.next = new_node
+        new_node = ListNode(value)
+        current = self
+        while current.next:
+            current = current.next
+        current.next = new_node
 
-    def remove_node(self, key):
+    def print_linked_list(self):
         """
-        Removes the first node from the linked list that contains the given key.
-
-        Args:
-            key (any): The value to search for and remove.
-
-        Returns:
-            bool: True if a node was removed, False otherwise.
+        Print the values of nodes in the linked list starting from the current node.
         """
-        head_val = self.head
+        current = self
+        while current:
+            print(current.val, end=" -> ")
+            current = current.next
+        print("None")
 
-        if (head_val is not None):
-            if (head_val.data == key):
-                self.head = head_val.next
-                head_val = None
-                return True
+    def find_middle(self):
+        """
+        Find the middle node(s) of the linked list and return them as a list.
+        """
+        slow = self
+        fast = self
 
-        while (head_val is not None):
-            if head_val.data == key:
-                break
-            prev = head_val
-            head_val = head_val.next
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
 
-        if (head_val is None):
-            return False
+        if fast:  # If the list has an odd number of elements
+            return [slow.val]
+        else:  # If the list has an even number of elements
+            return [slow.val, slow.next.val] if slow.next else [slow.val]
 
-        prev.next = head_val.next
-        head_val = None
-        return True
+if __name__ == "__main__":
+    # Create a linked list and append values to it
+    head = ListNode(1)
+    head.append(2)
+    head.append(3)
+    head.append(4)  # Uncomment or add more to test with different lengths
+    head.append(5)
+    head.append(6)
 
+    # Find the middle node(s) and print them
+    middle_nodes = head.find_middle()
+    print("Middle node(s):", middle_nodes)
 
-    def __str__(self):
-        linked_list_str = ""
-        temp = self.head
-        while(temp):
-            linked_list_str += str(temp.data) + " "
-            temp = temp.next
-        return linked_list_str
+    # Print the entire linked list
+    head.print_linked_list()
