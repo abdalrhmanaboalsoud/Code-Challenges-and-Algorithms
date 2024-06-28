@@ -1,83 +1,45 @@
-# Write here the code challenge solution
 class Node:
-    def __init__(self, value):
-        self.value = value
+    def __init__(self, data):
+        """
+        Initialize a new node with given data.
+
+        Args:
+            data: The data to be stored in the node.
+        """
+        self.data = data
         self.next = None
 
 class Stack:
     def __init__(self):
         """
-        Initializes a new instance of the `Stack` class.
-
-        This constructor initializes the `top` attribute to `None`, indicating that the stack is empty. It also initializes the `size` attribute to 0, representing the number of elements in the stack.
-
-        Parameters:
-            None
-
-        Returns:
-            None
+        Initialize an empty stack.
         """
-        self.top = None
+        self.head = None
         self.size = 0
-        
-        
-    def push(self, value):
+
+    def push(self, data):
         """
-        Adds a new node with the given value to the top of the stack.
+        Add a new element to the top of the stack.
 
-        Parameters:
-            value (Any): The value to be stored in the new node.
-
-        Returns:
-            None
-
-        This method creates a new node with the given value and assigns it to the `top` attribute of the stack. If the stack is not empty, it sets the `next` attribute of the new node to the current `top` node. Finally, it updates the `top` attribute to point to the new node and increments the `size` attribute by 1.
-
+        Args:
+            data: The data to be added to the stack.
         """
-        node = Node(value)
-        
-        if self.top:
-            node.next = self.top
-            
-        self.top = node
-        self.size +=1
-    
+        new_node = Node(data)
+        new_node.next = self.head
+        self.head = new_node
+        self.size += 1
+
     def pop(self):
         """
-        Remove and return the top element of the stack.
+        Remove and return the element from the top of the stack.
+        """
+        if self.is_empty():
+            return None
+        popped_data = self.head.data
+        self.head = self.head.next
+        self.size -= 1
+        return popped_data
 
-        Returns:
-            The value of the top element of the stack if the stack is not empty.
-            None if the stack is empty.
-        """
-        if self.top:
-            temp = self.top
-            self.top = self.top.next
-            self.size -=1
-            return temp.value
-
-        return None
-    
-    def peek(self):
-        """
-        Returns the value of the top element of the stack without removing it, or None if the stack is empty.
-
-        :return: The value of the top element of the stack, or None if the stack is empty.
-        :rtype: Any or None
-        """
-        if self.top:
-            return self.top.value
-        return None
-    
-    def get_size(self):
-        """
-        Returns the size of the stack.
-
-        Returns:
-            int: The size of the stack.
-        """
-        return self.size
-    
     def is_empty(self):
         """
         Check if the stack is empty.
@@ -86,33 +48,51 @@ class Stack:
             bool: True if the stack is empty, False otherwise.
         """
         return self.size == 0
-    
-def delete_middle_node(stack):
-  # If the stack is empty or has only one node, clear it.
-  if stack.is_empty() or stack.get_size() == 1:
-    stack.top = None
-    stack.size = 0
-    return stack
 
-  # Initialize pointers
-  slow_ptr = stack.top
-  fast_ptr = stack.top
-  prev_to_slow_ptr = None
+    def delete_middle(self):
+        """
+        Delete the middle element from the stack.
+        """
+        if self.is_empty():
+            return None
+        if self.size == 1:
+            return self.pop()
 
-  # Traverse the stack to find the middle node(s)
-  while fast_ptr and fast_ptr.next:
-    fast_ptr = fast_ptr.next.next
-    prev_to_slow_ptr = slow_ptr
-    slow_ptr = slow_ptr.next
+        slow_ptr = self.head
+        fast_ptr = self.head
+        prev_node = None
 
-  # Handle even stack size: prev_to_slow_ptr should point to the node before the middle nodes
-  if stack.get_size() % 2 == 0 and prev_to_slow_ptr:
-    prev_to_slow_ptr = prev_to_slow_ptr.next  # Point to the node before the first middle element
+        while fast_ptr and fast_ptr.next:
+            prev_node = slow_ptr
+            slow_ptr = slow_ptr.next
+            fast_ptr = fast_ptr.next.next
 
-  # Delete the middle node (or skip the middle nodes in case of even size)
-  if prev_to_slow_ptr and prev_to_slow_ptr.next:
-    prev_to_slow_ptr.next = prev_to_slow_ptr.next.next
-  stack.size -= 1
-  return stack
+        prev_node.next = slow_ptr.next
+        self.size -= 1
+        return self
 
+    def display(self):
+        """
+        Display the elements of the stack.
+        """
+        current = self.head
+        arr = []
+        while current:
+            arr.append(current.data)
+            current = current.next
+        return arr[::-1]
 
+# Example usage
+stack = Stack()
+stack.push(4)
+stack.push(3)
+stack.push(2)
+stack.push(1)
+
+print("Original stack:")
+print(stack.display())
+
+stack.delete_middle()
+
+print("Stack after deleting middle element:")
+print(stack.display())
