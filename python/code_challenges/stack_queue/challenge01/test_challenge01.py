@@ -32,5 +32,3 @@ def test_is_empty():
     assert stack.is_empty()
     stack.push(5)
     assert not stack.is_empty()
-
-# You can also add more complex tests and edge cases
