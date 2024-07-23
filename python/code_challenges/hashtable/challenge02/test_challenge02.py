@@ -1,39 +1,51 @@
-
+# test_repeated_word.py
 import pytest
-from challenge02 import Ch2
+from challenge02 import first_repeated_word
 
-def test_first_repeated_word():
-    # Test case 1: A sentence with a repeated word
-    input_string1 = "The quick brown fox jumps over the lazy dog. The dog barked."
-    assert Ch2.solution(input_string1) == "The"
+def test_single_repetition():
+    input_str = "ASAC is a department at LTUC. ASAC teaches programming in LTUC."
+    assert first_repeated_word(input_str) == "ASAC"
 
-    # Test case 2: A sentence with no repeated words
-    input_string2 = "I am learning programming at ASAC."
-    assert Ch2.solution(input_string2) == "No Repetition"
+def test_no_repetition():
+    input_str = "I am learning programming at ASAC."
+    assert first_repeated_word(input_str) == "No Repetition"
 
-    # Test case 3: A sentence with multiple repeated words (first one should be returned)
-    input_string3 = "Hello world! Hello everyone. Welcome to the world of programming."
-    assert Ch2.solution(input_string3) == "Hello"
+def test_multiple_repetitions():
+    input_str = "The cat jumped over the dog. The dog barked at the cat."
+    assert first_repeated_word(input_str) == "The"
 
-    # Test case 4: A sentence where the repeated word appears immediately after itself
-    input_string4 = "Python Python is a popular programming language."
-    assert Ch2.solution(input_string4) == "Python"
+def test_case_insensitivity():
+    input_str = "This is a test. This is only a Test."
+    assert first_repeated_word(input_str) == "This"
 
-    # Test case 5: A sentence with punctuation (should handle words correctly)
-    input_string5 = "Coding is fun. Yes, coding is very fun!"
-    assert Ch2.solution(input_string5) == "is"
+def test_repetition_with_punctuation():
+    input_str = "Hello, world! Hello again, world!"
+    assert first_repeated_word(input_str) == "world!"
 
-    # Test case 6: A sentence with repeated words having different cases
-    input_string6 = "JavaScript is great. javascript is versatile."
-    assert Ch2.solution(input_string6) == "is"
+def test_no_words():
+    input_str = ""
+    assert first_repeated_word(input_str) == "No Repetition"
 
-    # Test case 7: An empty string
-    input_string7 = ""
-    assert Ch2.solution(input_string7) == "No Repetition"
+def test_single_word():
+    input_str = "Hello"
+    assert first_repeated_word(input_str) == "No Repetition"
 
-    # Test case 8: A sentence with special characters
-    input_string8 = "Hello, world! Hello, everyone."
-    assert Ch2.solution(input_string8) == "Hello,"
+def test_special_characters():
+    input_str = "@home is where @heart is."
+    assert first_repeated_word(input_str) == "No Repetition"
+
+def test_numerical_input():
+    input_str = "123 456 123 789"
+    assert first_repeated_word(input_str) == "123"
+
+def test_large_input():
+    input_str = "a " * 10000 + "b " + "a"
+    assert first_repeated_word(input_str) == "a"
+
+def test_large_input_no_repetition():
+    input_str = " ".join(str(i) for i in range(100000))
+    assert first_repeated_word(input_str) == "No Repetition"
+
 
 if __name__ == "__main__":
-    pytest.main()
+    pytest.main()# Write your test here
